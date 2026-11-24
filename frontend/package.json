@@ -1,0 +1,32 @@
+{
+  "name": "battery-pos-client",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.mjs",
+    "build": "vite build --config vite.config.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node tests/frontend.test.cjs && node tests/features.test.cjs"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.13.0",
+    "decimal.js": "^10.6.0",
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-redux": "^9.3.0",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.31",
+    "tailwindcss": "^3.4.19",
+    "vite": "^6.4.5",
+    "prettier": "^3.9.10"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
+  }
+}

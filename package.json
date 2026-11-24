@@ -1,0 +1,19 @@
+{
+  "name": "battery-pos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BatteryPOS independent backend and frontend applications",
+  "scripts": {
+    "install:all": "npm --prefix backend ci && npm --prefix frontend ci",
+    "start": "npm --prefix backend run start",
+    "dev": "npm --prefix backend run dev",
+    "seed": "npm --prefix backend run seed",
+    "seed:demo": "npm --prefix backend run seed:demo",
+    "client:dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "test": "npm --prefix backend test && npm --prefix frontend test",
+    "test:integration": "npm --prefix backend run test:integration",
+    "test:demo": "npm --prefix backend run test:demo",
+    "check": "npm --prefix backend run check"
+  }
+}

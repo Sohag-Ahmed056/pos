@@ -1,0 +1,785 @@
+{
+  "info": {
+    "_postman_id": "b3e89a10-2f3b-417d-94c6-210459800a01",
+    "name": "Software Company Portfolio CMS API",
+    "description": "Complete Postman collection for Express, Prisma ORM, and PostgreSQL Software Company Portfolio CMS Backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Root Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Returns a message confirming that the server is running smoothly."
+          },
+          "response": []
+        },
+        {
+          "name": "Health Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Returns operational health status of the API."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.accessToken) {",
+                  "        pm.collectionVariables.set(\"accessToken\", jsonData.data.accessToken);",
+                  "    }",
+                  "    if (jsonData.data && jsonData.data.refreshToken) {",
+                  "        pm.collectionVariables.set(\"refreshToken\", jsonData.data.refreshToken);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Authenticates admin user and automatically sets collection access and refresh tokens."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Admin Profile (Me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            },
+            "description": "Fetches current logged in Admin profile details."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"admin123456\",\n  \"newPassword\": \"newadminpassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "change-password"]
+            },
+            "description": "Changes admin password."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "Logs out admin and clears authentication tokens from cookies."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Public Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "category",
+                  "value": "Web Development",
+                  "disabled": true
+                },
+                {
+                  "key": "featured",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "ecommerce",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Public endpoint to retrieve published portfolio projects."
+          },
+          "response": []
+        },
+        {
+          "name": "Public Get Project By Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/modern-ecommerce-platform",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects", "modern-ecommerce-platform"]
+            },
+            "description": "Public endpoint to get a single project by unique slug."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Get All Projects",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/projects?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "projects"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Admin endpoint to list all projects including draft and unpublished items."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Create Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Modern E-commerce Platform\",\n  \"shortDescription\": \"Full-stack e-commerce web application with payment integration.\",\n  \"description\": \"Comprehensive online shopping platform built with Express, PostgreSQL, and React.\",\n  \"thumbnail\": \"https://example.com/thumbnail.png\",\n  \"images\": [\n    \"https://example.com/img1.png\",\n    \"https://example.com/img2.png\"\n  ],\n  \"technologies\": [\n    \"Node.js\",\n    \"Express\",\n    \"PostgreSQL\",\n    \"Prisma\",\n    \"React\"\n  ],\n  \"category\": \"Web Development\",\n  \"githubUrl\": \"https://github.com/company/ecommerce\",\n  \"liveUrl\": \"https://ecommerce.example.com\",\n  \"videoUrl\": \"https://youtube.com/watch?v=example\",\n  \"featured\": true,\n  \"published\": true,\n  \"order\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects"]
+            },
+            "description": "Creates a new project in the portfolio."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"featured\": false,\n  \"order\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects", "1"]
+            },
+            "description": "Updates an existing project by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Delete Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/projects/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "projects", "1"]
+            },
+            "description": "Deletes a project by ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Company Settings",
+      "item": [
+        {
+          "name": "Public Get Company Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings"]
+            },
+            "description": "Public endpoint to fetch company settings metadata."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update Company Settings",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"ByteXa Lab\",\n  \"logo\": \"https://example.com/logo.png\",\n  \"favicon\": \"https://example.com/favicon.ico\",\n  \"email\": \"contact@bytexalab.com\",\n  \"phone\": \"+1234567890\",\n  \"whatsapp\": \"+1234567890\",\n  \"address\": \"123 Tech Street, Silicon Valley\",\n  \"description\": \"Leading software development and IT consulting agency.\",\n  \"facebookUrl\": \"https://facebook.com/bytexalab\",\n  \"linkedinUrl\": \"https://linkedin.com/company/bytexalab\",\n  \"githubUrl\": \"https://github.com/bytexalab\",\n  \"videoUrl\": \"https://youtube.com/watch?v=example\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings"]
+            },
+            "description": "Upserts singleton company setting record (id=1)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blog",
+      "item": [
+        {
+          "name": "Public Get All Blogs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "category",
+                  "value": "Web Development",
+                  "disabled": true
+                },
+                {
+                  "key": "tag",
+                  "value": "express",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Public endpoint to retrieve published blog posts."
+          },
+          "response": []
+        },
+        {
+          "name": "Public Get Blog By Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog/getting-started-with-express-and-prisma",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog", "getting-started-with-express-and-prisma"]
+            },
+            "description": "Public endpoint to fetch single blog post by slug."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Get All Blogs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/blog?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "admin", "blog"]
+            },
+            "description": "Admin endpoint to list all blog posts including DRAFT and PUBLISHED status."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Create Blog",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Getting Started with Express and Prisma\",\n  \"excerpt\": \"A quick guide to building REST APIs with Express and Prisma ORM.\",\n  \"content\": \"Full detailed article content here...\",\n  \"coverImage\": \"https://example.com/blog-cover.png\",\n  \"category\": \"Web Development\",\n  \"tags\": [\n    \"express\",\n    \"prisma\",\n    \"nodejs\"\n  ],\n  \"status\": \"PUBLISHED\",\n  \"seoTitle\": \"Express & Prisma Guide\",\n  \"seoDescription\": \"Learn Express and Prisma ORM\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog"]
+            },
+            "description": "Creates a new blog post."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update Blog",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"DRAFT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog", "1"]
+            },
+            "description": "Updates blog post. Changing status DRAFT -> PUBLISHED sets publishedAt to current date."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Delete Blog",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/blog/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "blog", "1"]
+            },
+            "description": "Deletes a blog post by ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Testimonials",
+      "item": [
+        {
+          "name": "Public Get Testimonials",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/testimonials",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "testimonials"]
+            },
+            "description": "Public endpoint to retrieve published testimonials sorted by display order."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Create Testimonial",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientName\": \"Jane Smith\",\n  \"companyName\": \"Tech Solutions\",\n  \"position\": \"CEO\",\n  \"avatar\": \"https://example.com/avatar.png\",\n  \"message\": \"ByteXa Lab delivered our software project ahead of schedule with top notch code quality.\",\n  \"rating\": 5,\n  \"published\": true,\n  \"order\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/testimonials",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "testimonials"]
+            },
+            "description": "Creates a client testimonial with 1 to 5 rating validation."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update Testimonial",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"published\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/testimonials/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "testimonials", "1"]
+            },
+            "description": "Updates a testimonial by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Delete Testimonial",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/testimonials/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "testimonials", "1"]
+            },
+            "description": "Deletes a testimonial by ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Admin Upload Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "upload"]
+            },
+            "description": "Uploads single or multiple images using Multer / Cloudinary."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

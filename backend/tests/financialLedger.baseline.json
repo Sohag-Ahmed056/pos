@@ -1,0 +1,18 @@
+{
+  "backend/src/modules/reports/customerLedger.excel.js": "0392f68562b858e9122e92e7c18536db6d4cc0bbde1a9aa6174c93c175dc77b7",
+  "backend/src/modules/reports/ledgerStatement.pdf.js": "c97d95f7daa3f7514967283017ed56d2617ee3b5bff91a2089750a869f70144f",
+  "backend/src/modules/reports/customerLedger.pdf.js": "a5b5da497fdc9f340becaf0ea7ff4131a2d8bb2386901fb44fdc0ad5e6b5ce5a",
+  "backend/src/modules/reports/ledgerStatement.excel.js": "93fbce89f159bb2bd2c3b35bd6bd8f91dff44702e3923567c45d1a9e54ccabf0",
+  "backend/src/modules/reports/reports.service.js": "c3b0f95f1956648af99eb688e82b7456dfa5c0aa8ef9f277253232e0798ce322",
+  "backend/src/modules/reports/reports.controller.js": "43a913a2840b54c324a3ed5fdb8768265ff51e5cb3c257e181ca3386e089787a",
+  "backend/src/modules/reports/ledgerStatement.layout.js": "09024f21be978e00b069e4194efb9215bce0ee4eef25933a9343cd0d0e50e2c6",
+  "backend/src/modules/reports/customerLedger.layout.js": "18ae992784462fb1440a57a1cd329915cbfdd756b3497efa51f38476abaffbd2",
+  "backend/src/modules/reports/reports.route.js": "f0f417fb057a1e60e6f5445c55289d110a60bf4eb918a39d20a186ce85a50a4c",
+  "backend/tests/customerLedger.test.js": "fb262125dbfb92fa494debcdde1d6e2e4dbfd49a8c289fc1045c03601e7c44bb",
+  "backend/tests/ledgerStatement.test.js": "ac1c5c56fe8dac89c6c89d0d728f99a0fb8795f34dc5c5773f0d53eb7811c427",
+  "frontend/features/reports/reportsApi.js": "0d93919dd717cac9c2795cf0fe9f29b76d3f47e0f09e4754a7938c6d46b50df3",
+  "frontend/features/reports/model/reportFilters.js": "1cff63fc59099df4de32fdaf6b664e2a53b7aa88fb79f612c53e1c916201e895",
+  "frontend/features/reports/components/LedgerStatementReport.jsx": "5c6f1910d4eb7899af190b147665002980c9e6e6ceb6fdead8687b2dc60527bd",
+  "frontend/features/reports/components/ReportResults.jsx": "7058ef1b70ed7dab67810bed20b65fe4b67e910d846b044635e7160ada99b859",
+  "frontend/features/reports/components/CustomerLedgerReport.jsx": "702eaf0420f64bc906aa3be9c2034200461e43fe51f22572fc471368440310da"
+}
