@@ -14,6 +14,8 @@ import { PaymentAllocationsTable } from './editor/PaymentAllocationsTable';
 export const DocumentEditor = ({ kind, initial, onClose }) => {
     const editor = useDocumentEditor({ kind, initial, onClose });
     const lines = hasProductLines(kind);
+    const missingPaymentAccount =
+        kind === 'sales' && Number(editor.payment.amount) > 0 && !editor.payment.payment_account_id;
     return (
         <Modal
             title={`${initial?.id ? 'Edit' : 'New'} ${editor.config.singular.toLowerCase()}`}
@@ -23,8 +25,9 @@ export const DocumentEditor = ({ kind, initial, onClose }) => {
             <form
                 onSubmit={(event) => {
                     event.preventDefault();
-                    if (event.nativeEvent.submitter?.value === 'post') editor.setConfirm(true);
-                    else editor.save(false);
+                    if (event.nativeEvent.submitter?.value === 'post') {
+                        if (!missingPaymentAccount) editor.setConfirm(true);
+                    } else editor.save(false);
                 }}
             >
                 {editor.error && <ErrorBox error={editor.error} />}
@@ -91,7 +94,7 @@ export const DocumentEditor = ({ kind, initial, onClose }) => {
                             disabled={
                                 editor.busy ||
                                 (lines && !editor.items.length) ||
-                                (kind === 'sales' && !!editor.dueError)
+                                (kind === 'sales' && (!!editor.dueError || missingPaymentAccount))
                             }
                         >
                             <Check size={16} />

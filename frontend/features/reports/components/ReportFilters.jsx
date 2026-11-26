@@ -6,8 +6,18 @@ import { isPartyLedger } from '../model/reportFilters';
 export const ReportFilters = ({ report, options, form, onChange, onReportChange, onSubmit, busy }) => {
     const supplier = report === 'supplier-ledger' || report.startsWith('supplier');
     const field = supplier ? 'supplier_id' : 'customer_id';
+    const invalid = !!form.from && !!form.to && form.from > form.to;
     return (
-        <form className="panel mb-6 p-5" onSubmit={onSubmit}>
+        <form
+            className="panel mb-6 p-5"
+            onSubmit={(event) => {
+                if (invalid) {
+                    event.preventDefault();
+                    return;
+                }
+                onSubmit(event);
+            }}
+        >
             <div className="grid items-end gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <Field
                     title="Report"
@@ -20,18 +30,25 @@ export const ReportFilters = ({ report, options, form, onChange, onReportChange,
                     title="From date"
                     type="date"
                     value={form.from}
+                    max={form.to || undefined}
                     onChange={(value) => onChange('from', value)}
                 />
                 <Field
                     title="To date"
                     type="date"
                     value={form.to}
+                    min={form.from || undefined}
                     onChange={(value) => onChange('to', value)}
                 />
-                <Button type="submit" className="h-10 justify-center" disabled={busy}>
+                <Button type="submit" className="h-10 justify-center" disabled={busy || invalid}>
                     <Filter size={15} />
                     {busy ? 'Loading…' : 'Apply filters'}
                 </Button>
+                {invalid && (
+                    <p role="alert" className="text-xs text-red-700 sm:col-span-2 xl:col-span-4">
+                        Choose an end date on or after the start date.
+                    </p>
+                )}
                 {(isPartyLedger(report) || report.includes('outstanding')) && (
                     <ResourceLookup
                         resource={supplier ? 'suppliers' : 'customers'}

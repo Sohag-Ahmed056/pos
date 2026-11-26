@@ -25,15 +25,26 @@ export const AdjustmentFields = ({ form, onChange }) => {
                 value={form.quantity_pcs}
                 onChange={(value) => onChange('quantity_pcs', value)}
             />
-            <Field
-                title="Unit cost · BDT"
-                type="number"
-                min="0"
-                step="0.0001"
-                required
-                value={form.unit_cost}
-                onChange={(value) => onChange('unit_cost', value)}
-            />
+            {form.adjustment_type === 'DECREASE' ? (
+                <Field
+                    title="Unit cost · BDT"
+                    type="text"
+                    value=""
+                    placeholder="Uses current warehouse average cost"
+                    disabled
+                    onChange={() => {}}
+                />
+            ) : (
+                <Field
+                    title="Unit cost · BDT"
+                    type="number"
+                    min="0"
+                    step="0.0001"
+                    required
+                    value={form.unit_cost}
+                    onChange={(value) => onChange('unit_cost', value)}
+                />
+            )}
             <Field
                 title="Reason"
                 required

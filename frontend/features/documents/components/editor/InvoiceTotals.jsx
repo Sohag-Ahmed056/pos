@@ -37,13 +37,21 @@ export const InvoiceTotals = ({ sale, totals, discount, onDiscount, payment, onP
                         onChange={(value) => onPayment({ ...payment, amount: value })}
                     />
                     {Number(payment.amount) > 0 && (
-                        <ResourceLookup
-                            resource="payment-accounts"
-                            title="Payment account"
-                            filters={{ active: true }}
-                            value={payment.payment_account_id}
-                            onChange={(value) => onPayment({ ...payment, payment_account_id: value })}
-                        />
+                        <div className="space-y-1.5">
+                            <ResourceLookup
+                                resource="payment-accounts"
+                                title="Payment account"
+                                required={false}
+                                filters={{ active: true }}
+                                value={payment.payment_account_id}
+                                onChange={(value) => onPayment({ ...payment, payment_account_id: value })}
+                            />
+                            {!payment.payment_account_id && (
+                                <p className="text-xs text-amber-800">
+                                    Select a payment account to post this payment with the sale.
+                                </p>
+                            )}
+                        </div>
                     )}
                     <SummaryRow title="Closing due" value={totals.closing} emphasis loading={dueLoading} />
                     <p className="text-[10px] text-slate-400">
